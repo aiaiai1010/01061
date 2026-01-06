@@ -756,7 +756,7 @@
             // 首の傾き = (90 - φ) + θ
             // φ: スマホの傾き（beta）
             // θ: 顔の傾き（facePitch）
-            const rawNeckAngle = (90 - phoneAngle) + facePitch;
+            const rawNeckAngle = (90 - phoneAngle) - facePitch;
             const calibratedNeckAngle = rawNeckAngle - calibrationOffset;
             
             document.getElementById('facePitch').textContent = facePitch.toFixed(1) + '°';
