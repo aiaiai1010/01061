@@ -755,21 +755,21 @@
         function updateDisplay() {
             // 首の傾き = (90 - φ) + θ
             // φ: スマホの傾き（beta）
-            // θ: 顔の傾き（facePitch）
-            const rawNeckAngle = (90 - phoneAngle) + facePitch;
-            const calibratedNeckAngle = rawNeckAngle - calibrationOffset;
+            // θ: 顔の傾き（facePitch）- キャリブレーション済み
+            const calibratedTheta = facePitch - calibrationOffset;
+            const neckAngle = (90 - phoneAngle) + calibratedTheta;
             
             document.getElementById('facePitch').textContent = facePitch.toFixed(1) + '°';
             document.getElementById('phoneAngle').textContent = phoneAngle.toFixed(1) + '°';
-            document.getElementById('pitchAngle').textContent = facePitch.toFixed(1) + '°';
+            document.getElementById('pitchAngle').textContent = calibratedTheta.toFixed(1) + '°';
             document.getElementById('yawAngle').textContent = faceYaw.toFixed(1) + '°';
             document.getElementById('rollAngle').textContent = faceRoll.toFixed(1) + '°';
             
-            const displayAngle = calibratedNeckAngle.toFixed(0);
+            const displayAngle = neckAngle.toFixed(0);
             document.getElementById('neckAngle').innerHTML = 
                 `${displayAngle}<span class="angle-unit">°</span>`;
             
-            updatePostureStatus(calibratedNeckAngle);
+            updatePostureStatus(neckAngle);
         }
         
         function updatePostureStatus(angle) {
@@ -796,7 +796,8 @@
         }
         
         function calibrate() {
-            calibrationOffset = facePitch + phoneAngle;
+            // θ（顔の傾き）のみをキャリブレーション
+            calibrationOffset = facePitch;
             
             calibrateBtn.classList.add('calibrating');
             calibrateBtn.textContent = '✓ キャリブレーション完了';
